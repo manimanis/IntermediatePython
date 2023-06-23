@@ -32,14 +32,16 @@
       <section>
         <h3>Arguments positionnels variables</h3>
         <p>Soit la fonction suivante :</p>
-        <pre><code class="python">def my_sum(a, b):
+        <pre><code class="python"># file01/exemple01.py
+          def my_sum(a, b):
     return a + b
 
 print(my_sum(5, 6))  </code></pre>
         <p>Cette fonction est limitée à deux arguments <code>a</code> et <code>b</code>. Nous voulons améliorer cette
           fonction afin d'accepter un nombre arbitraire d'arguments.</p>
         <p>La première solution consiste à utiliser une liste de valeurs comme suit :</p>
-        <pre><code class="python">def my_sum(my_ints):
+        <pre><code class="python"># file01/exemple02.py
+def my_sum(my_ints):
     result = 0
     for v in my_ints:
         result += v
@@ -50,7 +52,8 @@ print(my_sum(lints))</code></pre>
         <p>Cette solution présente un inconvénient majeur : il faut créer la liste d'arguments à transmettre à la
           fonction à chaque usage.</p>
         <p>En Python, <strong>*args</strong> est prévue pour cet usage particulier.</p>
-        <pre><code class="python">def my_sum(*args):
+        <pre><code class="python"># file01/exemple03.py
+def my_sum(*args):
     result = 0
     for v in args:
         result += v
@@ -61,7 +64,8 @@ print(my_sum(5, 6, 7))</code></pre>
           objet itérable <code>args</code>. Il est possible d'utiliser un autre nom outre que <code>args</code> et la
           fonction est toujours correcte.
         </p>
-        <pre><code class="python">def my_sum(*numbers):
+        <pre><code class="python"># file01/exemple04.py
+def my_sum(*numbers):
     result = 0
     for number in numbers:
         result += number
@@ -80,7 +84,8 @@ print(my_sum(5, 6, 7))</code></pre>
           <code>Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;</code>
         </p>
         <p>Pour construire une telle <strong>Connection String</strong> on peut écrire :</p>
-        <pre><code class="python">def connection_string(**kwargs):
+        <pre><code class="python"># file01/exemple05.py
+def connection_string(**kwargs):
     res = ""
     for key, value in kwargs.items():
         res += f"{key}={value};"
@@ -97,7 +102,8 @@ print(connection_string(host="localhost",
           sans
           toutefois oublier l'<strong>opérateur de déballage</strong> (**) spécifique aux <strong>arguments
             nommés</strong>.</p>
-        <pre><code class="python">def connection_string(**options):
+        <pre><code class="python"># file01/exemple06.py
+def connection_string(**options):
     res = ""
     for key, value in options.items():
         res += f"{key}={value};"
@@ -116,7 +122,8 @@ print(connection_string(host="localhost",
           <li>Arguments nommés variables (<code>**kwargs</code>)</li>
         </ul>
         <p><strong>Exemple :</strong></p>
-        <pre><code class="python">def my_func(a, b, *args, c=5, d="hi", **kwargs):
+        <pre><code class="python"># file01/exemple07.py
+def my_func(a, b, *args, c=5, d="hi", **kwargs):
     pass</code></pre>
         <p>Dans l'exmple précédent, <code>a</code> et <code>b</code> sont les arguments standards, et ils sont suivis
           par les arguments positionnels et nommés.</p>
@@ -128,7 +135,8 @@ print(connection_string(host="localhost",
         <p>La fonction <code>conv10()</code> convertit un nombre d'une base de numération, entre 2 et 16, vers la base
           10.
         </p>
-        <pre><code class="python">def conv10(num_str, from_base=10):
+        <pre><code class="python"># file01/exemple08.py
+def conv10(num_str, from_base=10):
     s = 0
     for dig in num_str:
         if "0" &lt;= dig &lt;= "9":
@@ -157,6 +165,27 @@ print(conv10("12", from_base=8))  # 12 en base  8 --> 10</code></pre>
         <p>Ou même la combinaison des deux :</p>
         <pre><code class="python"># combinaison
 print(conv10("12", from_base=8))  # 12 en base  8 --> 10</code></pre>
+
+        <h4>Requête d'insertion</h4>
+        <p>Pour insérer des données dans une table en utilise la commande SQL suivante :<br>
+          <code>INSERT INTO NomTable (NomCol1, ...) VALUES ('ValCol1', ...)</code>
+        </p>
+        <p>Le nombre de colonnes leurs noms et leurs valeurs dépendent du contexte d'utilisation, d'où l'utilisation
+          d'arguments nommés variables dans la fonction suivante :</p>
+        <pre><code class="python"># file01/exemple09.py
+def insert_command(tablename, **values):
+    colnames, colvalues = "", ""
+    for key, val in values.items():
+        if colnames != "":
+            colnames += ", "
+            colvalues += "', '"
+        colnames += key
+        colvalues += val
+    cmd = f"INSERT INTO {tablename} ({colnames}) VALUES ('{colvalues}')"
+    return cmd
+
+
+print(insert_command('clients', nomprenom="Mohamed Ali", numtel="23456789"))</code></pre>
       </section>
     </article>
   </main>
