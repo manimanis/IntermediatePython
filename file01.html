@@ -121,6 +121,43 @@ print(connection_string(host="localhost",
         <p>Dans l'exmple précédent, <code>a</code> et <code>b</code> sont les arguments standards, et ils sont suivis
           par les arguments positionnels et nommés.</p>
       </section>
+
+      <section>
+        <h3>Exemples</h3>
+        <h4>Conversion vers la base 10</h4>
+        <p>La fonction <code>conv10()</code> convertit un nombre d'une base de numération, entre 2 et 16, vers la base
+          10.
+        </p>
+        <pre><code class="python">def conv10(num_str, from_base=10):
+    s = 0
+    for dig in num_str:
+        if "0" &lt;= dig &lt;= "9":
+            v = ord(dig) - 48
+        else:
+            v = ord(dig) - 55
+        s = s * from_base + v
+    return s</code></pre>
+        <p>Cette fonction accepte deux arguments :</p>
+        <ul>
+          <li><strong>num_str</strong> : argument positionnel,</li>
+          <li><strong>from_base</strong> : argument nommé, ce paramètre est optionnel et sa valeur par défaut est 10.
+          </li>
+        </ul>
+        <p>On peut exploiter cette fonction en utilisant uniquement les <strong>arguments positionnels</strong> :</p>
+        <pre><code class="python"># arguments positionnels
+print(conv10("12"))  # 12 en base 10 --> 12
+print(conv10("12", 8))  # 12 en base  8 --> 10</code></pre>
+        <p>On peut aussi l'appeler en utilisant les <strong>arguments nommés</strong> :</p>
+        <pre><code class="python"># arguments nommés
+print(conv10(num_str="12"))  # 12 en base 10 --> 12
+print(conv10(num_str="21", from_base=12))  # 12 en base 12 --> 25
+print(conv10(from_base=5, num_str="12"))  # 12 en base 5  --> 7
+# combinaison
+print(conv10("12", from_base=8))  # 12 en base  8 --> 10</code></pre>
+        <p>Ou même la combinaison des deux :</p>
+        <pre><code class="python"># combinaison
+print(conv10("12", from_base=8))  # 12 en base  8 --> 10</code></pre>
+      </section>
     </article>
   </main>
 
