@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arguments positionnels & nommés</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/default.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <aside>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Python</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#aside_navbar"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="aside_navbar"></div>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="my-4 container">
+    <h1>Arguments positionnels & nommés</h1>
+    <article>
+      <h2>Menu</h2>
+      <section>
+        <h3>Arguments positionnels variables</h3>
+        <p>Soit la fonction suivante :</p>
+        <pre><code class="python">def my_sum(a, b):
+    return a + b
+
+print(my_sum(5, 6))  </code></pre>
+        <p>Cette fonction est limitée à deux arguments <code>a</code> et <code>b</code>. Nous voulons améliorer cette
+          fonction afin d'accepter un nombre arbitraire d'arguments.</p>
+        <p>La première solution consiste à utiliser une liste de valeurs comme suit :</p>
+        <pre><code class="python">def my_sum(my_ints):
+    result = 0
+    for v in my_ints:
+        result += v
+    return result
+
+lints = [1, 2, 3]
+print(my_sum(lints))</code></pre>
+        <p>Cette solution présente un inconvénient majeur : il faut créer la liste d'arguments à transmettre à la
+          fonction à chaque usage.</p>
+        <p>En Python, <strong>*args</strong> est prévue pour cet usage particulier.</p>
+        <pre><code class="python">def my_sum(*args):
+    result = 0
+    for v in args:
+        result += v
+    return result
+
+print(my_sum(5, 6, 7))</code></pre>
+        <p>Dans l'exemple précédent nous passons trois <strong>arguments positionnels</strong> regroupés dans un seul
+          objet itérable <code>args</code>. Il est possible d'utiliser un autre nom outre que <code>args</code> et la
+          fonction est toujours correcte.
+        </p>
+        <pre><code class="python">def my_sum(*numbers):
+    result = 0
+    for number in numbers:
+        result += number
+    return result
+
+print(my_sum(5, 6, 7))</code></pre>
+        <p>Le secret de cette définition est dans l'<strong>opérateur de déballage</strong> (*).</p>
+      </section>
+
+      <section>
+        <h3>Arguments nommés variables</h3>
+        <p>Python supporte en plus des <strong>arguments positionnels</strong> déjà présentés les <strong>arguments
+            nommés</strong> <code>**kwargs</code>.</p>
+        <p>Pour se connecter à une base de données en ADO .Net on utilise une <strong>Connection String</strong> qui
+          possède le format suivant : <br>
+          <code>Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;</code>
+        </p>
+        <p>Pour construire une telle <strong>Connection String</strong> on peut écrire :</p>
+        <pre><code class="python">def connection_string(**kwargs):
+    res = ""
+    for key, value in kwargs.items():
+        res += f"{key}={value};"
+    return res[:-1]
+
+print(connection_string(host="localhost", 
+                        user="salah", 
+                        password="1234", 
+                        database="location"))</code></pre>
+        <p>Puisque le nombre d'arguments passés à la fonction varie selon le SGBD utilisé nous avons utilisé
+          <code>kwargs</code>. Il s'agit d'un dictionnaire qui contient tous les paramètres de connexion requis.
+        </p>
+        <p>Tout comme avec <code>args</code> il est possible d'utiliser un autre nom, outre que <code>kwargs</code>,
+          sans
+          toutefois oublier l'<strong>opérateur de déballage</strong> (**) spécifique aux <strong>arguments
+            nommés</strong>.</p>
+        <pre><code class="python">def connection_string(**options):
+    res = ""
+    for key, value in options.items():
+        res += f"{key}={value};"
+    return res[:-1]</code></pre>
+      </section>
+
+      <section>
+        <h3>Ordre des arguments</h3>
+        <p>Python offre la possibilité de combiner les <strong>arguments positionnels</strong>, les <strong>arguments
+            nommés</strong> et les <strong>arguments standards</strong>. Cependant, il faut toujours veiler à respecter
+          l'ordre suivant :</p>
+        <ul>
+          <li>Arguments standards</li>
+          <li>Arguments positionnels variables (<code>*args</code>)</li>
+          <li>Arguments nommés</li>
+          <li>Arguments nommés variables (<code>**kwargs</code>)</li>
+        </ul>
+        <p><strong>Exemple :</strong></p>
+        <pre><code class="python">def my_func(a, b, *args, c=5, d="hi", **kwargs):
+    pass</code></pre>
+        <p>Dans l'exmple précédent, <code>a</code> et <code>b</code> sont les arguments standards, et ils sont suivis
+          par les arguments positionnels et nommés.</p>
+      </section>
+    </article>
+  </main>
+
+  <footer class="d-print-none bg-dark text-white p-2">
+    <div class="text-center">Page créée par Mohamed Anis MANI avec ♥</div>
+    <div class="text-center small">Année 2023</div>
+  </footer>
+
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/pages.js"></script>
+  <script src="assets/js/highlight.pack.js"></script>
+  <script src="assets/js/vue.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</body>
+
+</html>
