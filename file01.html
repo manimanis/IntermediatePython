@@ -187,6 +187,25 @@ def insert_command(tablename, **values):
 
 print(insert_command('clients', nomprenom="Mohamed Ali", numtel="23456789"))</code></pre>
       </section>
+      <section>
+        <h3>Exercices</h3>
+
+        <h4>Exercice 1</h4>
+        <p>Utiliser les arguments positionnels et les arguments nommés afin de générer une requête de sélection ayant le
+          format suivant :
+          <br>
+          <code>SELECT [*][col1, col2, col3, ...] FROM tablename</code>
+        </p>
+        <p>Ainsi, l'appel de fonction suivant :</p>
+        <pre><code class="python">print(select_command("clients"))</code></pre>
+<p>Génère la requête :</p>
+<pre><code class="nohighlight">SELECT * FROM clients</code></pre>
+<p>Et de même pour l'appel :</p>
+<pre><code class="python">print(select_command("eleves", "nomprenom", "datenaiss"))</code></pre>
+  <p>Qui affiche la requête :</p>
+  <pre><code class="nohighlight">SELECT nomprenom, datenaiss FROM eleves</code></pre>
+
+      </section>
     </article>
   </main>
 
