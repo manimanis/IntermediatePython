@@ -41,7 +41,14 @@
         </ul>
       </section>
       <section>
-        <h3>list comprehensions</h3>
+        <h3>lists comprehensions</h3>
+
+        <h4>Forme générale</h4>
+        <p>Sans filtrage :</p>
+        <pre><code class="python">variable = [out_exp for out_exp in input_list]</code></pre>
+        <p>Avec <code>condition</code> de filtrage :</p>
+        <pre><code class="python">variable = [out_exp for out_exp in input_list if condition]</code></pre>
+
         <h4>Exemple 1</h4>
         <p>Le code suivant génère la liste des carrés des nombres compris entre 1 et 10.</p>
         <pre><code class="python"># file02/exemple01.py
@@ -83,6 +90,15 @@ print(nbv)</code></pre>
         <pre><code class="python">nbv = len([car for car in phrase.lower() if car in "ouieya"])
 print(nbv)</code></pre>
         <p>avec les lists comprehensions.</p>
+        <h4>Exemple 4</h4>
+        <p>On veut filtrer la liste <code>lst</code> dans une autre <code>lst1</code> en enlevant les éléments qui se
+          répètent et conservant l'ordre d'apparition des éléments.</p>
+        <pre><code class="python">lst = [1, 2, 1, 7, 3, 3, 2, 7, 5]</code></pre>
+        <p>Le résultat recherché :</p>
+        <pre><code class="nohighlight">[1, 2, 7, 3, 5]</code></pre>
+        <p>Avec les lists comprehensions, le code peut ressembler à ce qui suit :</p>
+        <pre><code class="python">lst1 = [lst[i] for i in range(len(lst)) if lst.index(lst[i]) == i]</code></pre>
+
       </section>
     </article>
   </main>
