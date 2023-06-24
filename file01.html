@@ -184,8 +184,86 @@ def insert_command(tablename, **values):
     cmd = f"INSERT INTO {tablename} ({colnames}) VALUES ('{colvalues}')"
     return cmd
 
-
 print(insert_command('clients', nomprenom="Mohamed Ali", numtel="23456789"))</code></pre>
+      </section>
+
+      <section>
+        <h3>Opérateurs de déballage</h3>
+        <p>Le déballage est le processus consistant à extraire des éléments depuis une collection (une liste, un
+          dictionnaire, une chaîne, etc.).</p>
+        <p>Python supporte deux opérateurs de déballage :</p>
+        <ul>
+          <li>l'opérateur (*) est utilisé avec les itérables : liste, tuple, set, chaîne, etc.</li>
+          <li>l'opérateur (**) est utilisé avec les dictionnaire.</li>
+        </ul>
+        <p>Nous voulons affecter chacun des éléments de la liste <code>mybox</code> dans les variables
+          <code>item1</code>, <code>item2</code> et <code>item3</code>. La manière usuelle pour le faire est :
+        </p>
+        <pre><code class="python">mybox = ['cables', 'headphones', 'USB']
+item1, item2, item3 = mybox
+print(item1, item2, item3)</code></pre>
+
+        <h4>Cas d'utilisation 1</h4>
+        <p>Soit la liste suivante :</p>
+        <pre><code class="python">ventes = ["Article",          # article
+          1.5,                # prix unitaire
+          20, 25, 13, 16, 37, # dernières ventes
+          0.19,               # TVA
+          83]                 # stock</code></pre>
+        <ul>
+          <li>Le premier élément contient le nom de l'article,</li>
+          <li>Le second élément le prix unitaire,</li>
+          <li>L'avant dernier élément la TVA de cet article,</li>
+          <li>Le dernier élément la quantité restante en stock,</li>
+          <li>Les autres éléments indique le nombre d'articles vendus pendant les cinq derniers jours.</li>
+        </ul>
+        <p>Pour déballer cette liste on peut écrire :</p>
+        <pre><code class="python">art, pu, *qtes, tva, stock = ventes</code></pre>
+        <p>L'opérateur (*) est utilisé devant la variable <code>qtes</code> pour trouver les quantités vendues de cet
+          article durant les cinq derniers jours.</p>
+        <pre><code class="python">print(art, pu, tva, stock) # Article 1.5 0.19 83
+print(qtes)                # [20, 25, 13, 16, 37]</code></pre>
+        <p>De même en disposant d'une liste de nombres :</p>
+        <pre><code class="python">nbre = ["Nombres Premiers",
+        2, 3, 5, 7, 11, 13, 17, 19]</code></pre>
+        <p>On peut écrire l'instruction suivante pour récupérer le premier élément dans la variable <code>lib</code> et
+          les valeurs restantes dans la variable <code>prem</code>.</p>
+        <pre><code class="python">lib, *prems = nbre
+print(lib)   # Nombres Premiers
+print(prems) # [2, 3, 5, 7, 11, 13, 17, 19]</code></pre>
+        <p>Finalement, pour récupérer le dernier élément et les valeurs qui le précédent, on peut écrire :</p>
+        <pre><code class="python">savants = ["Newton", "Einstein", "Riemann"]
+*physiciens, mathematicien = savants
+print(physiciens)     # ['Newton', 'Einstein']
+print(mathematicien)  # Riemann</code></pre>
+
+        <h4>Cas d'utilisation 2</h4>
+        <p>Pour combiner deux listes <code>l1</code> et <code>l2</code> dans <code>l3</code>, on écrit :</p>
+        <pre><code class="python">l1 = [1, 3, 5, 7]
+l2 = [3, 5, 7, 9]
+# Combiner les deux listes
+l3 = [*l1, *l2] # 2 4 6 3 5 7</code></pre>
+        <p>Pour faire l'union de deux ensembles (set), <code>s3 = s1 &Union; s2</code>, on procède comme suit :</p>
+        <pre><code class="python">s1 = {1, 3, 5, 7}
+s2 = {3, 5, 7, 9}
+s3 = {*s1, *s2}
+print(s3) # {1, 3, 5, 7, 9}</code></pre>
+
+        <h4>Cas d'utilisation 3</h4>
+        <p>Soit la fonction <code>somme4</code> qui permet de calculer la somme de 2 à 4 entiers.</p>
+        <pre><code class="python">def somme4(a, b, c=0, d=0):
+    return a + b + c + d</code></pre>
+        <p>Pour calculer la somme des valeurs d'une liste <code>l1</code>, on peut écrire :</p>
+        <pre><code class="python"># Exemple 2 : liste de 4 éléments
+l1 = [1, 3, 5, 7]
+print(somme4(*l1)) # 16</code></pre>
+        <p>Ceci est équivaut à écrire :</p>
+        <pre><code class="python">print(somme4(l1[0], l1[1], l1[2], l1[3])) # 16</code></pre>
+        <p>Remarquons que l'opérateur de déballage (*) permet de simplifier l'appel de cette fonction.</p>
+        <p>On peut, aussi, utiliser l'opérateur de déballage avec la fonction <code>print()</code>. Ainsi, l'affichage
+          des éléments d'une liste peut être comme implémenté comme suit :</p>
+        <pre><code class="python">l = [10, 20, 30, 40]
+print(*l, sep="|")  # 10|20|30|40</code></pre>
       </section>
       <section>
         <h3>Exercices</h3>
@@ -198,12 +276,12 @@ print(insert_command('clients', nomprenom="Mohamed Ali", numtel="23456789"))</co
         </p>
         <p>Ainsi, l'appel de fonction suivant :</p>
         <pre><code class="python">print(select_command("clients"))</code></pre>
-<p>Génère la requête :</p>
-<pre><code class="nohighlight">SELECT * FROM clients</code></pre>
-<p>Et de même pour l'appel :</p>
-<pre><code class="python">print(select_command("eleves", "nomprenom", "datenaiss"))</code></pre>
-  <p>Qui affiche la requête :</p>
-  <pre><code class="nohighlight">SELECT nomprenom, datenaiss FROM eleves</code></pre>
+        <p>Génère la requête :</p>
+        <pre><code class="nohighlight">SELECT * FROM clients</code></pre>
+        <p>Et de même pour l'appel :</p>
+        <pre><code class="python">print(select_command("eleves", "nomprenom", "datenaiss"))</code></pre>
+        <p>Qui affiche la requête :</p>
+        <pre><code class="nohighlight">SELECT nomprenom, datenaiss FROM eleves</code></pre>
 
       </section>
     </article>
