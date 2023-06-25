@@ -57,7 +57,7 @@ for i in range(1, 11):
     lst.append(i*i)
 print(lst) 
 # [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</code></pre>
-        <p>En utiliant les <strong>lists comprehensions</strong> ce code devient :</p>
+        <p>En utilisant les <strong>lists comprehensions</strong> ce code devient :</p>
         <pre><code class="python">lst = [i*i for i in range(1, 11)]</code></pre>
 
         <h4>Exemple 2</h4>
@@ -101,7 +101,8 @@ print(nbv)</code></pre>
       </section>
       <section>
         <h3>set comprehension</h3>
-        <p>En Python, l'ensemble <code>set</code> est une structure de donnée qui n'autorise pas les doublons.</p>
+        <p>En Python, un ensemble (<code>set</code>) est une structure de données, semblable aux listes, qui n'autorise
+          pas les doublons.</p>
 
         <h4>Forme générale</h4>
         <p>Sans filtrage :</p>
@@ -111,7 +112,7 @@ print(nbv)</code></pre>
 
         <h4>Exemple 1</h4>
         <p>On simule le lancement de trois dés à six faces. Le lancement est effectué six fois de suite tout en notant
-          le résultat de chaque lancement dans une liste <code>l1</code>.</p>
+          le résultat de chaque tirage dans une liste <code>l1</code>.</p>
         <p>Le lancement est effectué d'une façon aléatoire à l'aide de la fonction <code>randint()</code>. Pour obtenir
           le même résultat que l'exemple suivant on fixe la séquence de nombre aléatoire à l'aide de
           <code>seed()</code>.
@@ -136,6 +137,70 @@ print(s1)
         <pre><code class="pyhon">s2 = {v for v in range(3, 19) if v not in s1}
 print(s2)
 # {4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18}</code></pre>
+
+        <h4>Exemple 2</h4>
+        <p>On veut écrire un script utilisant les <strong>sets comprehensions</strong> pour trouver :</p>
+        <ul>
+          <li>Les caractères qui composent une phrase,</li>
+          <li>Les lettres alphabétiques absentes dans cette même phrase.</li>
+        </ul>
+        <pre><code class="python"># file02/exemple06.py
+phrase = "A set is a collection which is unordered and unindexed."</code></pre>
+        <p>Les caractères qui composent cette phrase sont trouvés à l'aide de :</p>
+        <pre><code class="python">cars = {car for car in phrase.lower()}</code></pre>
+        <p>Pour retrouver les lettres alphabétiques manquants :</p>
+        <pre><code class="python">alpha_cars = {chr(i + 97) for i in range(26) if chr(i + 97) not in cars}</code></pre>
+        <p>En exploitant les opérateurs sur les ensembles, on peut également trouver le même résultat :</p>
+        <pre><code class="python">lettres = {chr(i + 97) for i in range(26)}
+alpha_cars = lettres - cars</code></pre>
+      </section>
+
+      <section>
+        <h3>dictionnary comprehension</h3>
+        <p>Un dictionnaire, en Python, est une collection d'éléments accessibles par une clé spécifique plutôt que par
+          un index.</p>
+        <h4>Forme générale</h4>
+        <p>Sans filtrage :</p>
+        <pre><code class="python">variable = {cle: valeur for elem in sequence}</code></pre>
+        <p>Avec <code>condition</code> de filtrage :</p>
+        <pre><code class="python">variable = {cle: valeur for elem in sequence if condition}</code></pre>
+
+        <h4>Exemple 1</h4>
+        <p>Nous voulons compter le nombre d'apparitions de chaque lettre alphabétique dans une phrase donnée. Une
+          méthode consiste à utiliser à initialiser un dictionnaire comme suit :</p>
+        <pre><code class="python"># file02/exemple07.py
+counts = {chr(i+97): 0 for i in range(26)}</code></pre>
+        <p>Puis, à parcourir la phrase caractère par caractère tout incrémentant le nombre d'occurences d'un caractère
+          s'il est alphabétique.</p>
+        <pre><code class="python">phrase = "Dictionary comprehension is a method for transforming one dictionary into another dictionary."
+for car in phrase.lower():
+    if car in counts:
+        counts[car] += 1</code></pre>
+        <p>On peut, ensuite, conserver uniquement les lettres qui apparaissent dans la phrase.</p>
+        <pre><code class="python">counts = {key: value for key, value in counts.items() if value > 0}</code></pre>
+        <p>Enfin, pour trouver les lettres ayant le nombre d'apparitions minimal ou maximal :</p>
+        <pre><code class="python">mx, mn = max(counts.values()), min(counts.values())
+max_counts = {key: value for key, value in counts.items() if value == mx or value == mn}
+# {'g': 1, 'o': 11, 'p': 1}</code></pre>
+
+        <h4>Exemple 2</h4>
+        <p>Dans un jeu organisé par un magasin les clients suivants (<code>custs</code>) on gagné des remises
+          respectives (<code>discs</code>) sur leurs achats.</p>
+        <pre><code class="python"># file02/exemple08.py
+from random import choice, seed
+
+seed(8912)
+
+custs = ["Amine", "Helmi", "Sarra", "Hiba"]
+discs = [choice([25, 50]) for _ in custs]</code></pre>
+        <p>Les noms des clients et les pourcentages de remises associés à chacun d'eux sont stockés dans des listes
+          indépendentes. Il est préférable de combiner ces deux listes dans un seul dictionnaire.</p>
+        <pre><code class="python">cust_disc = {cust: disc for cust, disc in zip(custs, discs)}
+print(cust_disc)
+# {'Amine': 25, 'Helmi': 25, 'Sarra': 50, 'Hiba': 25}</code></pre>
+        <p>Trouvons, maintenant, les remises pour les clients dont le nom commence par la lettre 'H'.</p>
+        <pre><code class="python">h_count = {cust: disc for cust, disc in cust_disc.items() if cust.startswith('H')}
+print(h_count) # {'Helmi': 25, 'Hiba': 25}</code></pre>
       </section>
     </article>
   </main>
