@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Itérateurs / Générateurs</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/default.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <aside>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Python</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#aside_navbar"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="aside_navbar"></div>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="my-4 container">
+    <h1>Itérateurs / Générateurs</h1>
+    <article>
+      <h2>Itérateurs / Itérables</h2>
+      <section>
+        <h3>Définitions</h3>
+        <p>Un <strong>itérable</strong> est un objet sur lequel on peut itérer. On peut obtenir un
+          <strong>itérateur</strong> en passant un <strong>objet itérable</strong> à la méthode <code>iter()</code>.
+        </p>
+        <p>Pour créer un <strong>itérateur</strong> à partir d'un <strong>itérable</strong> ce dernier doit respecter
+          le protocole <code>iterator</code> qui consiste à implémenter les méthodes magiques <code>__iter__()</code> et
+          <code>__next__()</code>.
+        </p>
+      </section>
+      <section>
+        <h3>Exploiter un itérateur</h3>
+        <p>On peut utiliser un <strong>itérateur</strong> pour itérer sur un <strong>itérable</strong>.</p>
+        <pre><code class="python"># file03/exemple01.py
+nom = "Salah"
+it = iter(nom)
+print(next(it)) # S
+print(next(it)) # a
+print(next(it)) # l
+print(next(it)) # a
+print(next(it)) # h
+print(next(it)) # Exception : StopIteration</code></pre>
+        <p>En Python, on peut créer un itérateur <code>it</code> à partir d'un objet <code>str</code> en utilisant la
+          fonction <code>iter(it)</code>. Par la suite, chaque caractère est accessible à travers l'appel répétitif de
+          la fonction <code>next(it)</code>. À la fin du parcours, l'appel de <code>next(it)</code> lève une
+          <strong>Exception</strong> de type <code>StopIteration</code>.
+        </p>
+        <p><strong>Remarque :</strong> c'est le protocole <code>iterator</code> qui rend possible l'écriture suivante :
+        </p>
+        <pre><code class="python"># file03/exemple02.py
+nom = "Salah"
+for car in nom:
+    print(car)</code></pre>
+      </section>
+
+      <section>
+        <h3>Créer un itérateur</h3>
+        <p>Pour créer un itérateur, il suffit d'implémenter les méthodes <code>__iter__()</code> et
+          <code>__next__()</code> dans la classe de l'objet itérable.
+        </p>
+        <p>La méthode <code>__iter__()</code> est responsable des opérations d'initialisation. Elle retourne l'objet
+          itérateur lui-même <code>self</code>.</p>
+        <p>La méthode <code>__next__()</code> renvoie l'élément suivant dans la séquence.</p>
+        <p>Pour démontrer ce principe, essayons d'implémenter notre version de la fonction prédéfinie
+          <code>range()</code>.
+        </p>
+        <pre><code class="python"># file03/exemple03.py
+class CustRange:
+    def __init__(self, start, end, step=1) -> None:
+        self._start = start
+        self._end = end
+        self._step = step
+    
+    def __iter__(self):
+        self._cur = self._start
+        return self
+    
+    def __next__(self):
+        if self._cur * self._step > self._end * self._step:
+            raise StopIteration
+        else:
+            val = self._cur
+            self._cur += self._step
+            return val
+        
+
+for i in CustRange(1, 6):
+    print(i, end=", ")
+print()
+# 1, 2, 3, 4, 5, 6,
+
+for i in CustRange(0, -8, -2):
+    print(i, end=", ")
+print()
+# 0, -2, -4, -6, -8,</code></pre>
+        <p>Dans la version actuelle de <code>CustRange</code> l'itérateur parcours toutes les valeurs de l'intervalle
+          <code>[start, end]</code> avec un pas <code>step</code> donné.
+        </p>
+        <p>Grâce au protocole <code>iterator</code>, nous pouvons utiliser un objet de cette classe pour tester
+          l'appartenance à un ensemble de valeurs :</p>
+        <pre><code class="python"># file03/exemple04.py
+from random import randint
+
+x = randint(1, 6)
+if x in CustRange(1, 6, 2):
+    print(x, "est impair")
+else:
+    print(x, "est pair")</code></pre>
+        <p>On peut, aussi, créer des séquences. Ici on veut l'ensemble résultant de l'opération :</p>
+        <p class="text-center">{1, 2, 3, 4, 5, 6, 7, 8, 9} - {2, 5, 8} = {1, 3, 4, 6, 7, 9}</p>
+        <pre><code class="python">s1 = set(CustRange(1,9)) - set(CustRange(2, 9, 3))
+print(s1) # {1, 3, 4, 6, 7, 9}</code></pre>
+      </section>
+      <section>
+        <h3>Exemples</h3>
+        <h4>Exemple 1</h4>
+        <p>On veut créer un itérateur qui renvoie tous les nombres premiers inférieurs ou égaux à une valeur donnée.</p>
+        <p>Commen&ccedil;ons par créer la classe <code>PrimeSequence</code> :</p>
+        <pre><code class="python"># file03/exemple05.py
+class PrimeSequence:
+    def __init__(self, end) -> None:
+        self._end = end
+    
+    def __iter__(self):
+        self._cur = 2
+        return self
+    
+    def __next__(self):
+        if self._cur > self._end:
+            raise StopIteration
+        val = self._cur
+        self._cur = self.prem_suivant(val)
+        return val
+
+    def prem_suivant(self, n):
+        i = n + (1 if n == 2 else 2)
+        while True:
+            prem = self.est_premier(i)
+            if prem:
+                break
+            i += 2
+        return i
+
+    def est_premier(self, n):
+        if n == 2 or n == 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        i, mx = 5, int(n**.5)+1
+        while i <= mx:
+            if n % i == 0:
+                return False
+            i += 2
+        return True</code></pre>
+        <p>Outre les méthodes <code>__iter__()</code> et <code>__next__()</code> nécessaires pour rendre
+          <code>PrimeSequence</code> un objet <strong>itérable</strong>, nous avons défini deux autres méthodes :
+        </p>
+        <ul>
+          <li><code>est_premier(n)</code> qui retourne <code>True</code> uniquement lorsque le paramètre passé est un
+            nombre premier,</li>
+          <li><code>prem_suivant(n)</code> qui recherche l'entier le plus petit <code>i</code> tel que <code>i</code>
+            est premier et <code>i &ge; n</code></li>
+        </ul>
+        <p>Pour afficher tous les nombres premiers inférieurs ou égaux à 50 :</p>
+        <pre><code class="python">for i in PrimeSequence(50):
+    print(i, end=", ")
+print()
+# 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, </code></pre>
+
+        <h4>Exemple 2</h4>
+        <p>La suite de Fibonacci est une suite récursive définie mathématiquement comme suit :</p>
+        <ul>
+          <li>u<sub>n</sub> = 1, si n &le; 1</li>
+          <li>u<sub>n</sub> = u<sub>n-1</sub> + u<sub>n-2</sub>, si n &ge; 2</li>
+        </ul>
+        <p>Construisons un itérable sur les termes de cette suite inférieurs ou égaux à une valeur donnée.</p>
+        <pre><code class="python"># file03/exemple06.py
+class FiboSequence:
+    def __init__(self, end) -> None:
+        self._end = end
+        self._u0 = 1
+        self._u1 = 1
+    
+    def __iter__(self):
+        self._un = 1
+        self._i = 0
+        return self
+    
+    def __next__(self):
+        if self._un > self._end:
+            raise StopIteration
+        val = self._un
+        self._i += 1
+        if self._i < 2:
+            self._un = 1
+        else:
+            self._un = self._u0 + self._u1
+            self._u0 = self._u1
+            self._u1 = self._un
+        return val</code></pre>
+<p>Utilisons cet itérable pour retrouver les termes de la suite inférieurs ou égaux à 100.</p>
+<pre><code class="python">for i in FiboSequence(100):
+    print(i, end=", ")
+print()
+# 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, </code></pre>
+      </section>
+    </article>
+  </main>
+
+  <footer class="d-print-none bg-dark text-white p-2">
+    <div class="text-center">Page créée par Mohamed Anis MANI avec ♥</div>
+    <div class="text-center small">Année 2023</div>
+  </footer>
+
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/pages.js"></script>
+  <script src="assets/js/highlight.pack.js"></script>
+  <script src="assets/js/vue.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</body>
+
+</html>
