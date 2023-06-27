@@ -209,11 +209,56 @@ class FiboSequence:
             self._u0 = self._u1
             self._u1 = self._un
         return val</code></pre>
-<p>Utilisons cet itérable pour retrouver les termes de la suite inférieurs ou égaux à 100.</p>
-<pre><code class="python">for i in FiboSequence(100):
+        <p>Utilisons cet itérable pour retrouver les termes de la suite inférieurs ou égaux à 100.</p>
+        <pre><code class="python">for i in FiboSequence(100):
     print(i, end=", ")
 print()
 # 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, </code></pre>
+      </section>
+    </article>
+
+    <article>
+      <h2>Générateurs</h2>
+      <section>
+        <h3>Définition</h3>
+        <p>Un <strong>générateur</strong> est une fonction qui renvoie un <strong>itérateur</strong> qui produit une
+          séquence de valeurs. Il est utile lorsqu'on souhaite produire une grande séquence de valeurs sans les stocker,
+          toutes, en mémoire.</p>
+        <p>La création d'un <strong>générateur</strong> est aussi simple que la définition d'une fonction normale.
+          Cependant, une fonction normale retourne, généralement, un seul résultat à l'aide de <code>return</code>
+          tandis qu'un <strong>générateur</strong> utilise l'instruction <code>yield</code>.</p>
+        <pre><code class="python">def generator_name(arg):
+    # statements
+    yield value1
+    yield value2</code></pre>
+        <p>Le mot clé <code>yield</code> retrourne une valeur (ici <code>value1</code>) et suspend l'exécution de la
+          fonction <strong>générateur</strong>. Le second appel de la fonction retrourne cette fois la valeur suivante
+          <code>value2</code> et suspend l'exécution de la fonction.
+        </p>
+      </section>
+
+      <section>
+        <h3>Créer un générateur</h3>
+        <p>Reprenons l'exemple simple du compteur qui renvoie toutes les valeurs entières dans un intervalle donné
+          [start, end].</p>
+        <pre><code class="python"># file03/exemple07.py
+def compter(start, end):
+    i = start
+    while i <= end:
+        yield i
+        i += 1
+
+for i in compter(1, 10):
+    print(i, end=", ")
+print()
+# 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,</code></pre>
+        <p><strong>Remarque :</strong> L'écriture d'un <strong>générateur</strong> est plus simple et plus facile que
+          celle d'un <strong>itérateur</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h3>generator comprehension</h3>
       </section>
     </article>
   </main>
