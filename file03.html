@@ -239,6 +239,7 @@ print()
 
       <section>
         <h3>Créer un générateur</h3>
+        <h4>Exemple 1</h4>
         <p>Reprenons l'exemple simple du compteur qui renvoie toutes les valeurs entières dans un intervalle donné
           [start, end].</p>
         <pre><code class="python"># file03/exemple07.py
@@ -255,10 +256,94 @@ print()
         <p><strong>Remarque :</strong> L'écriture d'un <strong>générateur</strong> est plus simple et plus facile que
           celle d'un <strong>itérateur</strong>.
         </p>
+
+        <h4>Exemple 2</h4>
+        <p>Un nombre entier n &in; &Nopf;* peut être écrit sous la forme d'un produit de facteurs premiers :
+          <code>n=f1&times;f2&times;f3&times;...fn</code>
+        </p>
+        <p>Ainsi, n=24 peut être écrit : <code>n=2&times;2&times;2&times;3</code>. Créer une fonction générateur qui
+          retourne la liste des facteurs premiers d'un nombre passé en argument.</p>
+        <pre><code class="python"># file03/exemple10.py
+def facteurs(n):
+    f = 2
+    end = int(n**.5)+1
+    while f > 1:
+        if n % f == 0:
+            yield f
+            n //= f
+        elif f == 2:
+            f = 3
+        elif f <= end:
+            f += 2
+        else:
+            f = n
+
+for f in facteurs(2*3*3*5*13):
+    print(f)</code></pre>
+
+        <h4>Exemple 3</h4>
+        <p>Un générateur peut être infini. Dans cet exemple, on veut générer la liste des nombres qui contiennent une
+          séquence de chiffres <code>num</code> en commen&ccedil;ant par <code>start</code>.</p>
+        <pre><code class="python"># file03/exemple11.py
+def contient(num, start=0):
+    i = start
+    while True:
+        if str(num) in str(i):
+            yield i
+        i += 1</code></pre>
+        <p>Pour afficher les trois nombres supérieurs à 90 qui contiennent le chiffre 8 on écrit :</p>
+        <pre><code class="python">seq1 = contient(8, 90)
+for i in range(3):
+    print(next(seq1))
+# 98, 108, 118</code></pre>
+        <p>Pour afficher cinq nombres pairs supérieurs à 200 et qui contiennent les chiffres 13 :</p>
+        <pre><code class="python">seq = contient(13, 200)
+count = 0
+while count < 5:
+    val = next(seq)
+    if val % 2 == 0:
+        print(val)
+        count += 1</code></pre>
+        <p>Dans ces exemples on commence par créer un itérateur à partir de ce générateur puis nous sommes libres
+          d'appeler la fonction <code>next()</code> autant de fois que nécessaire.</p>
       </section>
 
       <section>
         <h3>generator comprehension</h3>
+        <p>Tout comme les <strong>lists comprehensions</strong>, les <strong>sets comprehensions</strong> et les
+          <strong>dictionaries comprehensions</strong> il est possible de créer des <strong>generator
+            comprehension</strong> en utilisant la même écriture que nous avons abordé.
+        </p>
+
+        <h4>Forme générale</h4>
+        <p>Sans filtrage :</p>
+        <pre><code class="python">gen = {expression for elem in sequence}</code></pre>
+        <p>Avec <code>condition</code> de filtrage :</p>
+        <pre><code class="python">gen = {expression for elem in sequence if condition}</code></pre>
+
+        <h4>Exemple 1</h4>
+        <p>On commence par définir le générateur <code>alpha_cars()</code> qui génère la liste de toutes les lettres
+          alphabétiques.</p>
+        <pre><code class="python"># file03/exemple08.py
+def alpha_chars():
+    for i in range(65, 91):
+        yield chr(i)
+
+for i in alpha_chars():
+    print(i, end=",")
+print()
+# A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,</code></pre>
+        <p>Transformer ce générateur en <strong>generator comprehension</strong> permet de réduire l'écriture.</p>
+        <pre><code class="python">alpha_chars2 = (chr(i) for i in range(65, 91))</code></pre>
+        <p>pNous pouvons recourir à l'opérateur de déballage pour afficher les valeurs générées.</p>
+        <pre><code class="python">print(*alpha_chars2, sep=",")
+# A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z</code></pre>
+
+        <h4>Exemple 2</h4>
+        <p>Nous voulons maintenant afficher les chiffres hexadécimaux pairs de l'intervalle [0, 16].</p>
+        <pre><code class="python"># file03/exemple09.py
+hexa = (hex(i)[2:] for i in range(16) if i % 2 == 0)
+print(*hexa, sep=",")</code></pre>
       </section>
     </article>
   </main>
